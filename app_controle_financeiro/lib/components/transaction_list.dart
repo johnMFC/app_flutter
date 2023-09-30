@@ -14,19 +14,22 @@ class TransactionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-        child:transactions.isEmpty? Column(
-          children: <Widget> [
+        child:transactions.isEmpty
+        ?Column(
+          children: [
+            const SizedBox(height:20,),
             Text(
               'Nenhuma Transação Cadastrada!',
-              style: Theme.of(context).textTheme.headline6,
+               style: Theme.of(context).textTheme.headline6,
             ),
-            Container(
+            const SizedBox(height:20),
+            SizedBox(
               height:200,
-              child: Image.asset('assets/images/waiting.png',
-            
-              
+              child: Image.asset(
+                'assets/image/waiting.png',
+                 fit:BoxFit.cover,
               ),
-            ),
+            )
           ],
         ) : ListView.builder(
          itemCount: transactions.length, 
