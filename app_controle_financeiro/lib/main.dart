@@ -1,10 +1,10 @@
-import 'package:expenses/components/chart.dart';
+import 'package:expenses/components/transaction_form.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'components/transaction_form.dart';
 import 'components/transaction_list.dart';
-import 'models/transaction.dart';
 import 'components/chart.dart';
+import 'models/transaction.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -28,19 +28,18 @@ class ExpensesApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
-          button: TextStyle(
+          button: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-          )
+          ),
         ),
-      appBarTheme: const AppBarTheme(
-        titleTextStyle: TextStyle(
-          fontFamily:'OpenaSans',
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
       ),
     );
   }
@@ -54,42 +53,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List <Transaction> _transactions = [
-        Transaction(
-        id: 't0',
-        title: 'Conta antiga',
-        value: 400.00,
-        date: DateTime.now().subtract(Duration(days:33)),
-      ),
-      
-      Transaction(
-        id: 't1',
-        title: 'Novo Tênis de Corrida',
-        value: 310.76,
-        date: DateTime.now().subtract(Duration(days:3)),
-      ),
-      Transaction(
-        id: 't2',
-        title: 'Conta de Luz',
-        value: 211.30,
-        date: DateTime.now(),
-      ),
-  ];
-    List<Transaction> get _recenteTransactions{//get é usado para acessar os valores e propriedades de uma classe!!
-       return _transactions.where((tr){
-        return tr.date.isAfter(DateTime.now().subtract(
-         Duration(days:7)
-        ));
-    }).toList();//where é como se fosse um filtro 
-            
-    }
+  final List<Transaction> _transactions = [];
 
-  _addTransaction(String title, double value) {
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(
+        const Duration(days: 7),
+      ));
+    }).toList();
+  }
+
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-     date: DateTime.now().subtract(Duration(days:4)),
+      date: date,
     );
 
     setState(() {
@@ -97,6 +76,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     Navigator.of(context).pop();
+  }
+
+  _removeTransaction(String id) {
+    setState(() {
+      _transactions.removeWhere((tr) => tr.id == id);
+    });
   }
 
   _openTransactionFormModal(BuildContext context) {
@@ -124,8 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(_recenteTransactions),
-            TransactionList(_transactions),
+            Chart(_recentTransactions),
+            TransactionList(_transactions, _removeTransaction),
           ],
         ),
       ),
