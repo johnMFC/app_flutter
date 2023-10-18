@@ -31,8 +31,6 @@ class Chart extends StatelessWidget {
         'value': totalSum,
       };
     }).reversed.toList();
-    //Atravez do reverse ele vai reverter a lista priorizando os dias atuais;
-
   }
 
   double get _weekTotalValue {
@@ -52,11 +50,13 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupedTransactions.map((tr) {
             return Flexible(
-                  fit:FlexFit.tight,
-                  child: ChartBar(
-                  label: tr['day'] as String,
-                  value: tr['value'] as double,
-                  percentage: _weekTotalValue  == 0 ? 0 :(tr['value'] as double) / _weekTotalValue,
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: tr['day'] as String,
+                value: tr['value'] as double,
+                percentage: _weekTotalValue == 0
+                    ? 0
+                    : (tr['value'] as double) / _weekTotalValue,
               ),
             );
           }).toList(),
